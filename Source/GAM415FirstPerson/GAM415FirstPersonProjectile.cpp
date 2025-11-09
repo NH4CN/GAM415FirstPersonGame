@@ -3,6 +3,9 @@
 #include "GAM415FirstPersonProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/DecalComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AGAM415FirstPersonProjectile::AGAM415FirstPersonProjectile() 
 {
@@ -11,14 +14,13 @@ AGAM415FirstPersonProjectile::AGAM415FirstPersonProjectile()
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
 	CollisionComp->OnComponentHit.AddDynamic(this, &AGAM415FirstPersonProjectile::OnHit);		// set up a notification for when this component hits something blocking
-
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
-
+	ballMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ball Mesh"));
 	// Set as root component
 	RootComponent = CollisionComp;
-
+	ballMesh->SetupAttachment(CollisionComp);
 	// Use a ProjectileMovementComponent to govern this projectile's movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
@@ -26,7 +28,6 @@ AGAM415FirstPersonProjectile::AGAM415FirstPersonProjectile()
 	ProjectileMovement->MaxSpeed = 3000.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
-
 	// Die after 3 seconds by default
 	InitialLifeSpan = 3.0f;
 }
@@ -39,5 +40,17 @@ void AGAM415FirstPersonProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* O
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
 		Destroy();
+	}
+	if (OtherActor != nullptr)
+	{
+		float ranNumX = UKismetMathLibrary::RandomFloatInRange(0.f, 1.f);
+		float ranNumY = UKismetMathLibrary::RandomFloatInRange(0.f, 1.f);
+		float ranNumZ = UKismetMathLibrary::RandomFloatInRange(0.f, 1.f);
+		float frameNum = UKismetMathLibrary::RandomFloatInRange(0.f, 3.f);
+		FVector4 randColor = FVector4(ranNumX, ranNumY, ranNumZ, 1.f);
+		auto Decal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), baseMat, FVector(UKismetMathLibrary::RandomFloatInRange(20.f, 40.f)), Hit.Location, Hit.Normal.Rotation(), 0.f);
+		auto MatInstance = Decal->CreateDynamicMaterialInstance();
+		MatInstance->SetVectorParameterValue(FName("Color"), randColor);
+		MatInstance->SetScalarParameterValue(FName("Frame"), frameNum);
 	}
 }

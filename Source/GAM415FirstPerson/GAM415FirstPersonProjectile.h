@@ -17,10 +17,13 @@ class AGAM415FirstPersonProjectile : public AActor
 	/** Sphere collision component */
 	UPROPERTY(VisibleDefaultsOnly, Category=Projectile)
 	USphereComponent* CollisionComp;
-
 	/** Projectile movement component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* ProjectileMovement;
+	UPROPERTY(EditAnywhere)
+		UStaticMeshComponent* ballMesh;
+	UPROPERTY(EditAnywhere)
+		UMaterial* baseMat;
 
 public:
 	AGAM415FirstPersonProjectile();
