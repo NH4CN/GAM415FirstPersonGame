@@ -13,7 +13,6 @@ UCLASS(config=Game)
 class AGAM415FirstPersonProjectile : public AActor
 {
 	GENERATED_BODY()
-
 	/** Sphere collision component */
 	UPROPERTY(VisibleDefaultsOnly, Category=Projectile)
 	USphereComponent* CollisionComp;
@@ -24,14 +23,23 @@ class AGAM415FirstPersonProjectile : public AActor
 		UStaticMeshComponent* ballMesh;
 	UPROPERTY(EditAnywhere)
 		UMaterial* baseMat;
-
+	UPROPERTY()
+		FLinearColor randColor;
+	UPROPERTY(EditAnywhere)
+		UMaterialInterface* projMat;
+	UPROPERTY()
+		UMaterialInstanceDynamic* dmiMat;
+	
 public:
 	AGAM415FirstPersonProjectile();
 
+protected:
+	virtual void BeginPlay();
+
+public:
 	/** called when projectile hits something */
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
 	/** Returns CollisionComp subobject **/
 	USphereComponent* GetCollisionComp() const { return CollisionComp; }
 	/** Returns ProjectileMovement subobject **/
