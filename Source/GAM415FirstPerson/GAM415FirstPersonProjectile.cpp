@@ -17,7 +17,7 @@ AGAM415FirstPersonProjectile::AGAM415FirstPersonProjectile()
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
-	ballMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ball Mesh"));
+	ballMesh = CreateDefaultSubobject<UStaticMeshComponent>("Ball Mesh");
 	// Set as root component
 	RootComponent = CollisionComp;
 	ballMesh->SetupAttachment(CollisionComp);
