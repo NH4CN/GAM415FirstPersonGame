@@ -8,6 +8,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "PerlinProcTerrain.h"
 
 AGAM415FirstPersonProjectile::AGAM415FirstPersonProjectile() 
 {
@@ -66,5 +67,10 @@ void AGAM415FirstPersonProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* O
 		auto MatInstance = Decal->CreateDynamicMaterialInstance();
 		MatInstance->SetVectorParameterValue(FName("Color"), randColor);
 		MatInstance->SetScalarParameterValue(FName("Frame"), frameNum);
+		APerlinProcTerrain* procTerrain = Cast<APerlinProcTerrain>(OtherActor);
+		if (procTerrain)
+		{
+			procTerrain->AlterMesh(Hit.ImpactPoint);
+		}
 	}
 }

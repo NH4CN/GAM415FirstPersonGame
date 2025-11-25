@@ -44,6 +44,20 @@ void APerlinProcTerrain::AlterMesh(FVector impactPoint)
 	}
 }
 
+void APerlinProcTerrain::CreateVertices()
+{
+	for (int X = 0; X <= XSize; X++)
+	{
+		for (int Y = 0; Y <= YSize; Y++)
+		{
+			float Z = FMath::PerlinNoise2D(FVector2D(X * NoiseScale + 0.1, Y * NoiseScale + 0.1) * ZMultiplier);
+			GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, FString::Printf(TEXT("Z %f"), Z));
+			Vertices.Add(FVector(X * Scale, Y * Scale, Z));
+			UV0.Add(FVector2D(X * UVScale, Y * UVScale));
+		}
+	}
+}
+
 void APerlinProcTerrain::CreateTriangles()
 {
 	int Vertex = 0;
@@ -62,19 +76,3 @@ void APerlinProcTerrain::CreateTriangles()
 		Vertex++;
 	}
 }
-
-void APerlinProcTerrain::CreateVertices()
-{
-	for (int X = 0; X <= XSize; X++)
-	{
-		for (int Y = 0; Y <= YSize; Y++)
-		{
-			float Z = FMath::PerlinNoise2D(FVector2D(X * NoiseScale + 0.1, Y * NoiseScale + 0.1) * ZMultiplier);
-			GEngine->AddOnScreenDebugMessage(-1, 999.0f, FColor::Yellow, FString::Printf(TEXT("Z %f"), Z));
-			Vertices.Add(FVector(X * Scale, Y * Scale, Z));
-			UV0.Add(FVector2D(X * UVScale, Y * UVScale));
-		}
-	}
-}
-
-
