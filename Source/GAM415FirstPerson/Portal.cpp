@@ -13,10 +13,12 @@ APortal::APortal()
 	mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	boxComp = CreateDefaultSubobject<UBoxComponent>("Box Comp");
 	sceneCapture = CreateDefaultSubobject<USceneCaptureComponent2D>("Capture");
+	rootArrow = CreateDefaultSubobject<UArrowComponent>("Root Arrow");
 	RootComponent = boxComp;
 	mesh->SetupAttachment(boxComp);
 	sceneCapture->SetupAttachment(mesh);
 	mesh->SetCollisionResponseToAllChannels(ECR_Ignore);
+	rootArrow->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -48,7 +50,7 @@ void APortal::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AA
 			if (!playerChar->isTeleporting)
 			{
 				playerChar->isTeleporting = true;
-				FVector loc = OtherPortal->GetActorLocation();
+				FVector loc = OtherPortal->rootArrow->GetComponentLocation();
 				playerChar->SetActorLocation(loc);
 				FTimerHandle TimerHandle;
 				FTimerDelegate TimerDelegate;

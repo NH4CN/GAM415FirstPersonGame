@@ -7,6 +7,7 @@
 #include "Components/SceneCaptureComponent2D.h"
 #include "Components/BoxComponent.h"
 #include "Engine/TextureRenderTarget2D.h"
+#include "Components/ArrowComponent.h"
 #include "Portal.generated.h"
 
 class firstperson415Character;
@@ -29,6 +30,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* mesh;
+	UPROPERTY(EditAnywhere)
+		UArrowComponent* rootArrow;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USceneCaptureComponent2D* sceneCapture;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
